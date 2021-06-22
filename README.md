@@ -26,7 +26,7 @@ React is an open-source, front end, JavaScript library for building user interfa
 ## Features
 1)Using the Meteorologisk institutt api (https://api.met.no/weatherapi/locationforecast/) for forecast and icons.
 
-2)Weather now at Gothenburg.
+2)Present weather at device location.
 
 3)Next 7 days weather with scroll view.
 
@@ -35,13 +35,9 @@ React is an open-source, front end, JavaScript library for building user interfa
 5)Manual refresh on pull down on mobile platform.
 
 ## Future features:
-1)Get weather report of device location.
+1)Add dark and light mode.
 
-2)Name of city from google.
-
-3)Add dark and light mode.
-
-4)Detailed view of upcomming days.
+2)Detailed view of upcomming days.
 
 # Preview
 
