@@ -47,11 +47,11 @@ React is an open-source, front end, JavaScript library for building user interfa
 
 ## web page
 
-![Web page](./src/images/webScreenShot.png)
+![Web page](./images/webScreenShot.png)
 
 ## iOS application
 
-![iOS page](./src/Images/iOSscreenShot.jpeg)
+![iOS page](./images/iOSscreenShot.jpeg)
 
 ## Contributing
 
