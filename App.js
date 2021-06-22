@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, SafeAreaView, ScrollView, FlatList, Alert, RefreshControl } from 'react-native';
+import * as Location from 'expo-location';
 import WeatherIndc from './WeatherIndc';
 
 const App = () => {
 
     const [forecast, setForecast] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
+    const [locName, setLocName] = useState(null);
 
     const loadForecast = async () => {
         setRefreshing(true);
-        const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=57.79403549999999&lon=11.9802118`
+
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permission to access location was denied');
+        }
+
+        let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+        const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${location.coords.latitude}&lon=${location.coords.longitude}`
         const response = await fetch(url);
         const data = await response.json();
 
@@ -17,8 +26,8 @@ const App = () => {
             Alert.alert(`Error retrieving weather data: ${data.message}`);
         } else {
             forecastFunc(data.properties.timeseries);
+            locationFunc(location);
         }
-
         setRefreshing(false);
     }
 
@@ -54,6 +63,18 @@ const App = () => {
         setInterval(function () { loadForecast() }, 60 * 1000);
     }
 
+    const locationFunc = async (location) => {
+        const placeNameURL = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en`
+        const response = await fetch(placeNameURL);
+        const data = await response.json();
+
+        if (!response.ok) {
+            Alert.alert(`Error retrieving device location: ${data.message}`);
+        } else {
+            setLocName(data.city);
+        }
+    }
+
     useEffect(() => {
         loadForecast()
     }, [])
@@ -80,7 +101,7 @@ const App = () => {
 
             >
                 <Text style={styles.title}>Weather</Text>
-                <Text style={styles.subtitle}>Gothenburg</Text>
+                <Text style={styles.subtitle}>{locName}</Text>
                 <WeatherIndc currentTemp={currentTemp} currentSpeed={currentSpeed} CrntIcnSrc={currentIcon} iconType={"largeIcon"} text={dayTime} />
 
                 <View>
